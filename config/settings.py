@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-
+from celery.schedules import crontab
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -103,14 +103,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'ko-kr'
+# (위쪽) 타임존
+LANGUAGE_CODE = "ko-kr"
+TIME_ZONE = "Asia/Seoul"
+USE_TZ = True
 
-TIME_ZONE = 'asia/Seoul'
-
-USE_I18N = True
-
-USE_TZ = False # 로컬 시간 찍히게(실습용)
-
+# Celery 전역 타임존 설정
+CELERY_TIMEZONE = "Asia/Seoul"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
@@ -130,3 +129,17 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "ljo111004@gmail.com"
 EMAIL_HOST_PASSWORD = "wzdz axmu axbv zdok"  # 구글 앱 비밀번호
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Celery 브로커(로컬 Docker Redis)
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+# (선택) 결과 저장까지 쓰고 싶다면
+# CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/1"
+
+
+CELERY_BEAT_SCHEDULE = {
+    "send-reports-every-morning": {
+        "task": "myapp.tasks.daily_send_reports",
+        "schedule": crontab(minute="*"),
+    },
+}
+REPORT_RECIPIENTS = ["ljo111004@naver.com"]   # 필요에 맞게 수정
