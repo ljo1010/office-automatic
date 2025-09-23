@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myapp',
 ]
 
 MIDDLEWARE = [
@@ -102,14 +101,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
-
-LANGUAGE_CODE = 'ko-kr'
-
-TIME_ZONE = 'asia/Seoul'
-
-USE_I18N = True
-
-USE_TZ = False # 로컬 시간 찍히게(실습용)
 
 
 # Static files (CSS, JavaScript, Images)
